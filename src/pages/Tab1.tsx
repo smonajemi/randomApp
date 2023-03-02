@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { IonGrid, IonRow, IonCol, IonInput, IonButton } from '@ionic/react';
+import { IonGrid, IonRow, IonCol, IonInput, IonButton, IonSpinner } from '@ionic/react';
 
 interface IProps {
   id: string;
@@ -8,11 +8,14 @@ interface IProps {
 }
 
 const Tab1: FunctionComponent = () => {
-  const [searchText, setSearchText] = useState<string>('');
+  const [prompt, setPrompt] = useState<string>('');
   const [images, setImages] = useState<IProps[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSearch = async (event: any) => {
     event.preventDefault();
+    setLoading(true);
+
     try {
       const response = await fetch(`http://localhost:3000/api/generate-image`, {
         method: 'POST',
@@ -24,35 +27,36 @@ const Tab1: FunctionComponent = () => {
         })
       });
       const data = await response.json();
-      setImages([...images, { id: data.data[0].url, url: data.data[0].url, alt: searchText }]);
+      setImages([...images, { id: data.data[0].url, url: data.data[0].url, alt: prompt }]);
     } catch (error) {
       console.error(error);
     }
 
-    setSearchText('');
+    setLoading(false);
+    setPrompt('');
   };
 
   return (
     <IonGrid>
       <IonRow>
         <IonCol>
-          <div>
-            <IonInput
-              value={searchText}
-              onIonChange={(event) => setSearchText(event.detail.value!)}
-              placeholder="Search for an image..."
-            />
-            <IonButton onClick={handleSearch} disabled={!searchText}>
-              Search
-            </IonButton>
+          <div style={{ justifyContent: 'center', display: 'flex', marginTop: '2em', marginBottom: '2em' }}>
+            <form onSubmit={handleSearch}>
+              <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt"></IonInput>
+              <IonButton type="submit">Generate Image</IonButton>
+            </form>
           </div>
         </IonCol>
       </IonRow>
       <IonRow>
-        {images.map((image) => (
-          <IonCol key={image.id}>
-            <img src={image.url} alt={image.alt} />
-          </IonCol>
+        {images.map((image, index) => (
+        <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
+        {loading ? (
+          <IonSpinner key={`spinner-${index}`} />
+        ) : (
+          <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        )}
+      </IonCol>
         ))}
       </IonRow>
     </IonGrid>
