@@ -27,12 +27,14 @@ const Tab1: FunctionComponent = () => {
         })
       });
       const data = await response.json();
-      setImages([...images, { id: data.data[0].url, url: data.data[0].url, alt: prompt }]);
+      const newImage = { id: data.data[0].url, url: data.data[0].url, alt: prompt };
+      setImages([...images, newImage]);
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
 
-    setLoading(false);
     setPrompt('');
   };
 
@@ -42,23 +44,25 @@ const Tab1: FunctionComponent = () => {
         <IonCol>
           <div style={{ justifyContent: 'center', display: 'flex', marginTop: '2em', marginBottom: '2em' }}>
             <form onSubmit={handleSearch}>
-              <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt"></IonInput>
-              <IonButton type="submit">Generate Image</IonButton>
+              <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt" style={{ overflow: 'hidden' }}></IonInput>
+              <IonButton type="submit" style={{ overflow: 'hidden' }}>Generate Image</IonButton>
             </form>
           </div>
         </IonCol>
       </IonRow>
-      <IonRow>
-        {images.map((image, index) => (
-        <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
-        {loading ? (
-          <IonSpinner key={`spinner-${index}`} />
-        ) : (
-          <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        )}
-      </IonCol>
-        ))}
-      </IonRow>
+      <div style={{ height: '600px', overflowY: 'scroll' }}>
+        <IonRow>
+          {images.map((image, index) => (
+            <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
+              {loading && index === images.length - 1 ? (
+                <IonSpinner key={`spinner-${index}`} />
+              ) : (
+                <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              )}
+            </IonCol>
+          ))}
+        </IonRow>
+      </div>
     </IonGrid>
   );
 };
