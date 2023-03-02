@@ -42,8 +42,8 @@ const ImageGenerator: FunctionComponent = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonTitle color={'danger'}>Tab 1</IonTitle>
+      <IonToolbar>
+          <IonTitle>Image Generator</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" scrollY={false}>
