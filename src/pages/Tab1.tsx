@@ -50,21 +50,21 @@ const Tab1: FunctionComponent = () => {
           </div>
         </IonCol>
       </IonRow>
-      <div style={{ height: '600px', overflowY: 'scroll' }}>
-        <IonRow>
-          {images.map((image, index) => (
-            <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
-              <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </IonCol>
-          ))}
-        </IonRow>
+      <div style={{ height: '500px', overflowY: 'scroll' }}>
+      <IonRow>
+        {images.map((image, index) => (
+          <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
+            <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          </IonCol>
+        ))}
+      </IonRow>
       </div>
       {loading && images.length > 0 ? (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1em' }}>
           <IonSpinner />
         </div>
       ) : null}
-
+      
     </IonGrid>
   );
 };
