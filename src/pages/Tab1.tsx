@@ -42,29 +42,30 @@ const Tab1: FunctionComponent = () => {
     <IonGrid>
       <IonRow>
         <IonCol>
-          <div style={{ justifyContent: 'center', display: 'flex', marginTop: '2em', marginBottom: '2em' }}>
-            <form onSubmit={handleSearch}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', marginBottom: '2em' }}>
+            <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
               <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt" style={{ overflow: 'hidden' }}></IonInput>
-              <IonButton type="submit" style={{ overflow: 'hidden' }}>Generate Image</IonButton>
+              <IonButton type="submit" style={{ overflow: 'hidden', marginLeft: '1em' }}>Generate Image</IonButton>
             </form>
           </div>
+
         </IonCol>
       </IonRow>
       <div style={{ height: '500px', overflowY: 'scroll' }}>
-      <IonRow>
-        {images.map((image, index) => (
-          <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
-            <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </IonCol>
-        ))}
-      </IonRow>
+        <IonRow>
+          {images.map((image, index) => (
+            <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
+              <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </IonCol>
+          ))}
+        </IonRow>
       </div>
       {loading && images.length > 0 ? (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1em' }}>
           <IonSpinner />
         </div>
       ) : null}
-      
+
     </IonGrid>
   );
 };
