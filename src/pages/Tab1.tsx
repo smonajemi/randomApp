@@ -1,33 +1,21 @@
 import React, { FunctionComponent, useState } from 'react';
-import { IonGrid, IonRow, IonCol, IonInput, IonButton, IonSpinner } from '@ionic/react';
-
-interface IProps {
-  id: string;
-  url: string;
-  alt: string;
-}
+import { IonGrid, IonRow, IonCol, IonInput, IonButton, IonSpinner, IonPage, IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/react';
+import { ImageProps } from '../types/Image.types';
+import { useApi } from '../components/hooks/useApi';
 
 const Tab1: FunctionComponent = () => {
   const [prompt, setPrompt] = useState<string>('');
-  const [images, setImages] = useState<IProps[]>([]);
+  const [images, setImages] = useState<ImageProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const {generateImage} = useApi()
 
   const handleSearch = async (event: any) => {
     event.preventDefault();
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/generate-image`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          prompt
-        })
-      });
-      const data = await response.json();
-      const newImage = { id: data.data[0].url, url: data.data[0].url, alt: prompt };
+      const data = await generateImage(prompt) as any
+      const newImage = { id: data?.data[0]?.url, url: data?.data[0]?.url, alt: prompt };
       setImages([...images, newImage]);
       setLoading(false);
     } catch (error) {
@@ -39,34 +27,43 @@ const Tab1: FunctionComponent = () => {
   };
 
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', marginBottom: '2em' }}>
-            <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
-              <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt" style={{ overflow: 'hidden' }}></IonInput>
-              <IonButton type="submit" style={{ overflow: 'hidden', marginLeft: '1em' }}>Generate Image</IonButton>
-            </form>
-          </div>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle color={'danger'}>Tab 1</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <IonGrid>
+          <IonRow>
+            <IonCol>
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', marginBottom: '2em' }}>
+                <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
+                  <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt" style={{ overflow: 'hidden' }}></IonInput>
+                  <IonButton type="submit" style={{ overflow: 'hidden', marginLeft: '1em' }}>Generate Image</IonButton>
+                </form>
+              </div>
 
-        </IonCol>
-      </IonRow>
-      <div style={{ height: '500px', overflowY: 'scroll' }}>
-        <IonRow>
-          {images.map((image, index) => (
-            <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
-              <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </IonCol>
-          ))}
-        </IonRow>
-      </div>
-      {loading && images.length > 0 ? (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1em' }}>
-          <IonSpinner />
-        </div>
-      ) : null}
+          </IonRow>
+          <div style={{ height: '500px', overflowY: 'scroll' }}>
+            <IonRow>
+              {images.map((image, index) => (
+                <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
+                  <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </IonCol>
+              ))}
+            </IonRow>
+          </div>
+          {loading && images.length > 0 ? (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1em' }}>
+              <IonSpinner />
+            </div>
+          ) : null}
 
-    </IonGrid>
+        </IonGrid>
+      </IonContent>
+    </IonPage>
   );
 };
 
