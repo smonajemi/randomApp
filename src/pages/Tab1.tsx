@@ -7,7 +7,20 @@ const Tab1: FunctionComponent = () => {
   const [prompt, setPrompt] = useState<string>('');
   const [images, setImages] = useState<ImageProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const {generateImage} = useApi()
+  const { generateImage } = useApi()
+  const downloadImage = (imageIndex: number) => {
+    const confirmDownload = window.confirm('Would you like to download the image?');
+    if (confirmDownload) {
+      const element = document.createElement('a');
+      element.target = '_blank';
+      element.href = images[imageIndex].url;
+      element.download = `image${imageIndex}.png`;
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+  }
+
 
   const handleSearch = async (event: any) => {
     event.preventDefault();
@@ -33,7 +46,7 @@ const Tab1: FunctionComponent = () => {
           <IonTitle color={'danger'}>Tab 1</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent className="ion-padding" scrollY={false}>
         <IonGrid>
           <IonRow>
             <IonCol>
@@ -46,23 +59,24 @@ const Tab1: FunctionComponent = () => {
 
             </IonCol>
           </IonRow>
-          <div style={{ height: '500px', overflowY: 'scroll' }}>
+          <div style={{ height: '400px', overflowY: 'scroll', padding: '1em' }}>
             <IonRow>
               {images.map((image, index) => (
-                <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
+
+                <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', padding: '.15em' }} onClick={() => downloadImage(index)}>
                   <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </IonCol>
               ))}
             </IonRow>
           </div>
-          {loading && images.length > 0 ? (
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1em' }}>
-              <IonSpinner />
-            </div>
-          ) : null}
-
         </IonGrid>
       </IonContent>
+      {loading && images.length >= 0 ? (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <IonSpinner name="dots"></IonSpinner>
+        </div>
+      ) : null}
+
     </IonPage>
   );
 };
