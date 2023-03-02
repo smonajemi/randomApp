@@ -58,11 +58,11 @@ const App: FunctionComponent = () => (
         <IonTabBar slot="bottom">
           <IonTabButton tab="ImageGenerator" href="/ImageGenerator">
             <IonIcon aria-hidden="true" icon={imagesOutline} />
-            <IonLabel>Tab 1</IonLabel>
+            <IonLabel>Image</IonLabel>
           </IonTabButton>
           <IonTabButton tab="GrammarChecker" href="/GrammarChecker">
             <IonIcon aria-hidden="true" icon={bookOutline} />
-            <IonLabel>Tab 2</IonLabel>
+            <IonLabel>Grammar</IonLabel>
           </IonTabButton>
           {/* <IonTabButton tab="tab3" href="/tab3">
             <IonIcon aria-hidden="true" icon={square} />
