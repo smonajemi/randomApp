@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonButton, IonImg } from '@ionic/react';
-import Spinner from '../components/Spinner';
+import React, { FunctionComponent, useState } from 'react';
+import { IonGrid, IonRow, IonCol, IonInput, IonButton } from '@ionic/react';
 
-const Tab1: React.FC = () => {
-  const [prompt, setPrompt] = useState('');
-  const [image, setImage] = useState('');
+interface IProps {
+  id: string;
+  url: string;
+  alt: string;
+}
 
-  const handleSubmit = async (event: any) => {
+const Tab1: FunctionComponent = () => {
+  const [searchText, setSearchText] = useState<string>('');
+  const [images, setImages] = useState<IProps[]>([]);
+
+  const handleSearch = async (event: any) => {
     event.preventDefault();
     try {
       const response = await fetch(`http://localhost:3000/api/generate-image`, {
@@ -19,33 +24,39 @@ const Tab1: React.FC = () => {
         })
       });
       const data = await response.json();
-      setImage(data.data[0].url);
+      setImages([...images, { id: data.data[0].url, url: data.data[0].url, alt: searchText }]);
     } catch (error) {
       console.error(error);
     }
+
+    setSearchText('');
   };
 
   return (
-<>
-<IonPage>
-  <IonHeader>
-    <IonToolbar>
-      <IonTitle>Ionic React DALL-E Example</IonTitle>
-    </IonToolbar>
-  </IonHeader>
-  <IonContent>
-    <div className="container">
-      <form onSubmit={handleSubmit}>
-        <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt"></IonInput>
-        <IonButton type="submit">Generate Image</IonButton>
-      </form>
-
-      {image ? <IonImg src={image} onClick={handleSubmit}></IonImg> : <Spinner />}
-    </div>
-  </IonContent>
-</IonPage>
-</>
-);
+    <IonGrid>
+      <IonRow>
+        <IonCol>
+          <div>
+            <IonInput
+              value={searchText}
+              onIonChange={(event) => setSearchText(event.detail.value!)}
+              placeholder="Search for an image..."
+            />
+            <IonButton onClick={handleSearch} disabled={!searchText}>
+              Search
+            </IonButton>
+          </div>
+        </IonCol>
+      </IonRow>
+      <IonRow>
+        {images.map((image) => (
+          <IonCol key={image.id}>
+            <img src={image.url} alt={image.alt} />
+          </IonCol>
+        ))}
+      </IonRow>
+    </IonGrid>
+  );
 };
 
 export default Tab1;

@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/:apiName', async (req, res) => {
     const param = req.params.apiName
-    const apiKey = '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'
+    const apiKey = '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'
     switch (param) {
         case 'generate-image':
             try {
