@@ -1,0 +1,7 @@
+{
+  "name": "myIApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
