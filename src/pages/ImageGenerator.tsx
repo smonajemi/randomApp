@@ -8,40 +8,42 @@ const ImageGenerator: FunctionComponent = () => {
   const [images, setImages] = useState<ImageProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { generateImage } = useApi()
-
   const downloadImage = (imageIndex: number) => {
     const confirmDownload = window.confirm('Would you like to download the image?');
     if (confirmDownload) {
-      const { url } = images[imageIndex];
       const element = document.createElement('a');
-      element.href = url;
+      element.target = '_blank';
+      element.href = images[imageIndex].url;
       element.download = `image${imageIndex}.png`;
+      document.body.appendChild(element);
       element.click();
-      element.remove();
+      document.body.removeChild(element);
     }
-  };
+  }
 
-  const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSearch = async (event: any) => {
     event.preventDefault();
     setLoading(true);
 
     try {
-      const data  = await generateImage(prompt) as any
-      const newImage = { id: data[0]?.url, url: data[0]?.url, alt: prompt };
+      const data = await generateImage(prompt) as any
+      const newImage = { id: data?.data[0]?.url, url: data?.data[0]?.url, alt: prompt };
       setImages([...images, newImage]);
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
 
-    setLoading(false);
     setPrompt('');
   };
 
   return (
     <IonPage>
       <IonHeader>
-      <IonToolbar>
-          <IonTitle>Image Generator</IonTitle>
+        <IonToolbar>
+          <IonTitle color={'danger'}>Tab 1</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" scrollY={false}>
@@ -50,15 +52,17 @@ const ImageGenerator: FunctionComponent = () => {
             <IonCol>
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2em', marginBottom: '2em' }}>
                 <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center' }}>
-                  <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt" style={{ overflow: 'hidden' }} />
+                  <IonInput value={prompt} onIonChange={e => setPrompt(e.detail.value!)} placeholder="Enter prompt" style={{ overflow: 'hidden' }}></IonInput>
                   <IonButton type="submit" style={{ overflow: 'hidden', marginLeft: '1em' }}>Generate Image</IonButton>
                 </form>
               </div>
+
             </IonCol>
           </IonRow>
           <div style={{ height: '400px', overflowY: 'scroll', padding: '1em' }}>
             <IonRow>
               {images.map((image, index) => (
+
                 <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', padding: '.15em' }} onClick={() => downloadImage(index)}>
                   <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </IonCol>
@@ -67,11 +71,12 @@ const ImageGenerator: FunctionComponent = () => {
           </div>
         </IonGrid>
       </IonContent>
-      {loading && images.length > 0 && (
+      {loading && images.length >= 0 ? (
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <IonSpinner name="dots" />
+          <IonSpinner name="dots"></IonSpinner>
         </div>
-      )}
+      ) : null}
+
     </IonPage>
   );
 };
