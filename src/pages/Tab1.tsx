@@ -54,15 +54,17 @@ const Tab1: FunctionComponent = () => {
         <IonRow>
           {images.map((image, index) => (
             <IonCol size="4" key={index} style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
-              {loading && index === images.length - 1 ? (
-                <IonSpinner key={`spinner-${index}`} />
-              ) : (
-                <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              )}
+              <img src={image.url} alt={image.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </IonCol>
           ))}
         </IonRow>
       </div>
+      {loading && images.length > 0 ? (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1em' }}>
+          <IonSpinner />
+        </div>
+      ) : null}
+
     </IonGrid>
   );
 };
