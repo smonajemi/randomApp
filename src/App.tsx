@@ -13,7 +13,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { bookOutline, square, imagesOutline } from 'ionicons/icons';
 import ImageGenerator from './pages/ImageGenerator';
 import GrammarChecker from './pages/GrammarChecker';
-import Tab3 from './pages/Tab3';
+import TaAIAssistant from './pages/AIAssistant';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,6 +34,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { FunctionComponent } from 'react';
+import AIAssistant from './pages/AIAssistant';
 
 setupIonicReact();
 
@@ -42,32 +43,32 @@ const App: FunctionComponent = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/ImageGenerator">
+          <Route exact path="/imageGenerator">
             <ImageGenerator />
           </Route>
-          <Route exact path="/GrammarChecker">
+          <Route exact path="/grammarChecker">
             <GrammarChecker />
           </Route>
-          {/* <Route path="/tab3">
-            <Tab3 />
-          </Route> */}
+          <Route path="/aiAssistant">
+            <AIAssistant />
+          </Route>
           <Route exact path="/">
             <Redirect to="/ImageGenerator" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="ImageGenerator" href="/ImageGenerator">
+          <IonTabButton tab="imageGenerator" href="/imageGenerator">
             <IonIcon aria-hidden="true" icon={imagesOutline} />
             <IonLabel>Image</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="GrammarChecker" href="/GrammarChecker">
+          <IonTabButton tab="grammarChecker" href="/grammarChecker">
             <IonIcon aria-hidden="true" icon={bookOutline} />
             <IonLabel>Grammar</IonLabel>
           </IonTabButton>
-          {/* <IonTabButton tab="tab3" href="/tab3">
+          <IonTabButton tab="assistant" href="/aiAssistant">
             <IonIcon aria-hidden="true" icon={square} />
-            <IonLabel>Tab 3</IonLabel>
-          </IonTabButton> */}
+            <IonLabel>AI</IonLabel>
+          </IonTabButton>
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
