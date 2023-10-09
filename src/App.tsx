@@ -7,7 +7,8 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  setupIonicReact
+  setupIonicReact,
+  useIonToast
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { bookOutline, square, imagesOutline } from 'ionicons/icons';
@@ -35,6 +36,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import { FunctionComponent } from 'react';
 import AIAssistant from './pages/AIAssistant';
+
 
 setupIonicReact();
 
@@ -65,10 +67,10 @@ const App: FunctionComponent = () => (
             <IonIcon aria-hidden="true" icon={bookOutline} />
             <IonLabel>Grammar</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="assistant" href="/aiAssistant">
+          {/* <IonTabButton tab="assistant" href="/aiAssistant">
             <IonIcon aria-hidden="true" icon={square} />
             <IonLabel>AI</IonLabel>
-          </IonTabButton>
+          </IonTabButton> */}
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>

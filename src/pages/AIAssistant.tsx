@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { IonContent, IonPage, IonFooter, IonTextarea, IonButton, IonItem, IonLabel, IonHeader, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonPage, IonFooter, IonTextarea, IonButton, useIonToast, IonItem, IonLabel, IonHeader, IonTitle, IonToolbar } from '@ionic/react';
 
 const AIAssistant: React.FC = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const [currentMessage, setCurrentMessage] = useState<string>('');
+  const [present] = useIonToast();
 
   const handleSend = () => {
     if (currentMessage.trim().length > 0) {
       setMessages([...messages, currentMessage]);
       setCurrentMessage('');
+      // presentToast('top')
     }
   };
 
@@ -75,6 +77,7 @@ const AIAssistant: React.FC = () => {
         </IonItem>
         <IonButton
           fill="clear"
+          disabled={currentMessage?.length === 0}
           onClick={handleSend}
           style={{
             position: 'fixed',
